@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">    
+    <link rel="icon" href="../static/images/favicon.png">
+
+    <title>Lonesome Chat</title>
+</head>
+<body>
+    <div class="wrapper">
+        <form action="" onsubmit="sendMessage(event)">        
+            <textarea placeholder="Message" name="message" class="message-input" id="messageText"></textarea>   
+            <button>Send</button>
+        </form>
+        <div class="list-messages" style="visibility: hidden;">                    
+            <!-- <div class="message-box">        
+                <div><span class="message__number"></span></div>
+                <div class="message__content"></div> 
+            </div> -->
+        </div>
+    </div>
+
+    <script>
+        let ws = new WebSocket('ws://' + window.location.host + '/chat');        
+
+        ws.onmessage = function(event) {            
+            let messages = document.getElementsByClassName('list-messages')[0];
+            if (messages.style.visibility == 'hidden') messages.style.visibility = 'visible';
+
+            let messages_child = document.createElement('div');
+            let message = document.createElement('div');
+            let msg_number = document.createElement('span');
+            messages_child.className = 'message-box';
+            message.className = 'message__content';
+            msg_number.className = 'message__number';
+            
+            data = JSON.parse(event.data);
+            
+            msg_number.innerText = data['msg_number'];
+            message.innerText = data['message'];
+
+            messages_child.appendChild(msg_number);
+            messages_child.appendChild(message);            
+            messages.appendChild(messages_child);
+        };
+
+        function sendMessage(event) {
+            let message = document.getElementById('messageText');               
+            if (message.value.trim().length) {
+                ws.send(JSON.stringify({'message': message.value}));
+                message.value = '';                
+            };        
+            event.preventDefault();
+        };
+
+    </script>
+</body>
+</html>
