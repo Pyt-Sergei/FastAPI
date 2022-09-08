@@ -1,2 +1,2 @@
 # FastAPI
-![Screenshot](screenshot.png)
+![Screenshot](Снимок экрана (310).png)
