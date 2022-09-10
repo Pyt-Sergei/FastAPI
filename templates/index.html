@@ -50,9 +50,9 @@
         function sendMessage(event) {
             let message = document.getElementById('messageText');               
             if (message.value.trim().length) {
-                ws.send(JSON.stringify({'message': message.value}));
-                message.value = '';                
-            };        
+                ws.send(JSON.stringify({'message': message.value}));                         
+            };
+            message.value = '';
             event.preventDefault();
         };
 
